@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class AuthService
 {
@@ -43,18 +45,28 @@ class AuthService
     public function getProfile(User $user): array
     {
         return [
-            'id'         => $user->id,
-            'name'       => $user->name,
-            'email'      => $user->email,
-            'phone'      => $user->phone,
-            'role'       => $user->role,
-            'status'     => $user->status,
-            'created_at' => $user->created_at,
+            'id'                  => $user->id,
+            'name'                => $user->name,
+            'email'               => $user->email,
+            'phone'               => $user->phone,
+            'profile_picture_url' => $user->profile_picture
+                                        ? asset('storage/' . $user->profile_picture)
+                                        : null,
+            'role'                => $user->role,
+            'status'              => $user->status,
+            'created_at'          => $user->created_at,
         ];
     }
 
-    public function updateProfile(User $user, array $data): array
+    public function updateProfile(User $user, array $data, ?UploadedFile $picture = null): array
     {
+        if ($picture) {
+            if ($user->profile_picture) {
+                Storage::disk('public')->delete($user->profile_picture);
+            }
+            $data['profile_picture'] = $picture->store("users/{$user->id}/avatar", 'public');
+        }
+
         $user->update(array_filter($data, fn($v) => $v !== null));
 
         return $this->formatUser($user->fresh());
@@ -74,12 +86,15 @@ class AuthService
     private function formatUser(User $user): array
     {
         return [
-            'id'     => $user->id,
-            'name'   => $user->name,
-            'email'  => $user->email,
-            'phone'  => $user->phone,
-            'role'   => $user->role,
-            'status' => $user->status,
+            'id'                  => $user->id,
+            'name'                => $user->name,
+            'email'               => $user->email,
+            'phone'               => $user->phone,
+            'profile_picture_url' => $user->profile_picture
+                                        ? asset('storage/' . $user->profile_picture)
+                                        : null,
+            'role'                => $user->role,
+            'status'              => $user->status,
         ];
     }
 }

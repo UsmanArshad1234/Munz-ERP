@@ -52,11 +52,16 @@ class AuthController extends Controller
     public function updateProfile(Request $request): JsonResponse
     {
         $request->validate([
-            'name'  => 'sometimes|required|string|max:255',
-            'phone' => 'nullable|string|max:20',
+            'name'            => 'sometimes|required|string|max:255',
+            'phone'           => 'nullable|string|max:20',
+            'profile_picture' => 'nullable|file|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
-        $user = $this->authService->updateProfile($request->user(), $request->only('name', 'phone'));
+        $user = $this->authService->updateProfile(
+            $request->user(),
+            $request->only('name', 'phone'),
+            $request->file('profile_picture')
+        );
 
         return $this->success($user, 'Profile updated');
     }
