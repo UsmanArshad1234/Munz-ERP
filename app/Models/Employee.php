@@ -21,8 +21,8 @@ class Employee extends Model
         'employee_id', 'name', 'mobile', 'email', 'nationality',
         'job_title', 'department', 'status', 'work_emirate', 'zone',
         'platform_name', 'platform_id', 'salary_amount', 'salary_type',
-        'wps_status', 'passport_number', 'passport_expiry',
-        'emirates_id', 'emirates_id_expiry', 'visa_expiry',
+        'wps_status', 'passport_number', 'passport_expiry', 'passport_document',
+        'emirates_id', 'emirates_id_expiry', 'visa_expiry', 'visa_document',
         'labour_card_expiry', 'driving_license', 'driving_license_expiry',
         'assigned_bike_id', 'notes', 'created_by',
     ];

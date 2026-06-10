@@ -43,18 +43,55 @@ class EmployeeService
 
     public function create(array $data, int $createdBy): Employee
     {
+        // Extract files — we need the employee ID first before storing
+        $files = $this->extractDocumentFiles($data);
+
         $data['employee_id'] = $this->generateEmployeeId();
         $data['created_by']  = $createdBy;
         $data['status']      = $data['status'] ?? 'active';
         $data['wps_status']  = $data['wps_status'] ?? 'no_wps';
 
-        return Employee::create($data);
+        $employee = Employee::create($data);
+
+        // Upload files now that we have the employee ID
+        if (!empty($files)) {
+            $paths = [];
+            foreach ($files as $field => $file) {
+                $paths[$field] = $file->store("employees/{$employee->id}/docs", 'public');
+            }
+            $employee->update($paths);
+        }
+
+        return $employee->fresh();
     }
 
     public function update(Employee $employee, array $data): Employee
     {
+        foreach (['passport_document', 'visa_document'] as $field) {
+            if (isset($data[$field]) && $data[$field] instanceof \Illuminate\Http\UploadedFile) {
+                if ($employee->$field) {
+                    Storage::disk('public')->delete($employee->$field);
+                }
+                $data[$field] = $data[$field]->store("employees/{$employee->id}/docs", 'public');
+            } else {
+                unset($data[$field]);
+            }
+        }
+
         $employee->update($data);
         return $employee->fresh();
+    }
+
+    private function extractDocumentFiles(array &$data): array
+    {
+        $files = [];
+        foreach (['passport_document', 'visa_document'] as $field) {
+            if (isset($data[$field]) && $data[$field] instanceof \Illuminate\Http\UploadedFile) {
+                $files[$field] = $data[$field];
+                unset($data[$field]);
+            }
+        }
+        return $files;
     }
 
     public function delete(Employee $employee): void
@@ -183,9 +220,15 @@ class EmployeeService
             'wps_status'              => $employee->wps_status,
             'passport_number'         => $employee->passport_number,
             'passport_expiry'         => $employee->passport_expiry?->toDateString(),
+            'passport_document_url'   => $employee->passport_document
+                                            ? asset('storage/' . $employee->passport_document)
+                                            : null,
             'emirates_id'             => $employee->emirates_id,
             'emirates_id_expiry'      => $employee->emirates_id_expiry?->toDateString(),
             'visa_expiry'             => $employee->visa_expiry?->toDateString(),
+            'visa_document_url'       => $employee->visa_document
+                                            ? asset('storage/' . $employee->visa_document)
+                                            : null,
             'labour_card_expiry'      => $employee->labour_card_expiry?->toDateString(),
             'driving_license'         => $employee->driving_license,
             'driving_license_expiry'  => $employee->driving_license_expiry?->toDateString(),
