@@ -43,41 +43,16 @@ class EmployeeService
 
     public function create(array $data, int $createdBy): Employee
     {
-        // Extract files — we need the employee ID first before storing
-        $files = $this->extractDocumentFiles($data);
-
         $data['employee_id'] = $this->generateEmployeeId();
         $data['created_by']  = $createdBy;
         $data['status']      = $data['status'] ?? 'active';
         $data['wps_status']  = $data['wps_status'] ?? 'no_wps';
 
-        $employee = Employee::create($data);
-
-        // Upload files now that we have the employee ID
-        if (!empty($files)) {
-            $paths = [];
-            foreach ($files as $field => $file) {
-                $paths[$field] = $file->store("employees/{$employee->id}/docs", 'public');
-            }
-            $employee->update($paths);
-        }
-
-        return $employee->fresh();
+        return Employee::create($data);
     }
 
     public function update(Employee $employee, array $data): Employee
     {
-        foreach (['passport_document', 'visa_document'] as $field) {
-            if (isset($data[$field]) && $data[$field] instanceof \Illuminate\Http\UploadedFile) {
-                if ($employee->$field) {
-                    Storage::disk('public')->delete($employee->$field);
-                }
-                $data[$field] = $data[$field]->store("employees/{$employee->id}/docs", 'public');
-            } else {
-                unset($data[$field]);
-            }
-        }
-
         $employee->update($data);
         return $employee->fresh();
     }
@@ -117,17 +92,6 @@ class EmployeeService
         return $result;
     }
 
-    private function extractDocumentFiles(array &$data): array
-    {
-        $files = [];
-        foreach (['passport_document', 'visa_document'] as $field) {
-            if (isset($data[$field]) && $data[$field] instanceof \Illuminate\Http\UploadedFile) {
-                $files[$field] = $data[$field];
-                unset($data[$field]);
-            }
-        }
-        return $files;
-    }
 
     public function delete(Employee $employee): void
     {
