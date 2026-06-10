@@ -106,7 +106,7 @@ class EmployeeController extends Controller
     public function uploadDocument(Request $request, Employee $employee): JsonResponse
     {
         $request->validate([
-            'file'          => 'required|file|max:10240|mimes:jpg,jpeg,png,pdf,doc,docx',
+            'file'          => 'required|file|max:5120|mimes:jpg,jpeg,png,pdf',
             'document_type' => 'required|in:' . implode(',', EmployeeDocument::TYPES),
             'expiry_date'   => 'nullable|date',
         ]);
@@ -119,34 +119,63 @@ class EmployeeController extends Controller
             $request->user()->id
         );
 
-        return $this->created([
+        return $this->created($this->formatDocumentResponse($document), 'Document uploaded successfully');
+    }
+
+    // POST /api/employees/{employee}/documents/{type}/upload  (upload or replace by type)
+    public function uploadByType(Request $request, Employee $employee, string $type): JsonResponse
+    {
+        if (!in_array($type, EmployeeDocument::TYPES)) {
+            return $this->error('Invalid document type. Allowed: ' . implode(', ', EmployeeDocument::TYPES), 422);
+        }
+
+        $request->validate([
+            'file'        => 'required|file|max:5120|mimes:jpg,jpeg,png,pdf',
+            'expiry_date' => 'nullable|date',
+        ]);
+
+        $document = $this->employeeService->uploadOrReplaceDocument(
+            $employee,
+            $request->file('file'),
+            $type,
+            $request->expiry_date,
+            $request->user()->id
+        );
+
+        return $this->created($this->formatDocumentResponse($document), ucfirst(str_replace('_', ' ', $type)) . ' uploaded successfully');
+    }
+
+    private function formatDocumentResponse(EmployeeDocument $document): array
+    {
+        return [
             'id'            => $document->id,
             'document_type' => $document->document_type,
             'original_name' => $document->original_name,
-            'file_path'     => asset('storage/' . $document->file_path),
+            'file_url'      => asset('storage/' . $document->file_path),
             'file_size'     => $document->file_size_human,
             'expiry_date'   => $document->expiry_date?->toDateString(),
             'uploaded_at'   => $document->created_at,
-        ], 'Document uploaded successfully');
+        ];
     }
 
     // GET /api/employees/{employee}/documents
     public function documents(Employee $employee): JsonResponse
     {
-        $docs = $employee->documents()
-            ->orderBy('document_type')
-            ->get()
-            ->map(fn($d) => [
-                'id'            => $d->id,
-                'document_type' => $d->document_type,
-                'original_name' => $d->original_name,
-                'file_url'      => asset('storage/' . $d->file_path),
-                'file_size'     => $d->file_size_human,
-                'expiry_date'   => $d->expiry_date?->toDateString(),
-                'uploaded_at'   => $d->created_at,
-            ]);
+        $employee->load('documents');
 
-        return $this->success($docs);
+        $byType = [];
+        foreach (EmployeeDocument::TYPES as $type) {
+            $byType[$type] = null;
+        }
+
+        foreach ($employee->documents()->orderBy('document_type')->get() as $d) {
+            $byType[$d->document_type] = $this->formatDocumentResponse($d);
+        }
+
+        return $this->success([
+            'documents_by_type' => $byType,
+            'all_documents'     => $employee->documents->map(fn($d) => $this->formatDocumentResponse($d))->values(),
+        ]);
     }
 
     // DELETE /api/employees/{employee}/documents/{document}

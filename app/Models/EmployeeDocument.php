@@ -18,8 +18,7 @@ class EmployeeDocument extends Model
     ];
 
     const TYPES = [
-        'passport_copy', 'emirates_id_copy', 'driving_license_copy',
-        'visa_copy', 'labour_card_copy', 'photo', 'contract', 'other',
+        'passport', 'emirates_id', 'visa', 'labour_card', 'driving_license', 'photo', 'contract', 'other',
     ];
 
     public function employee(): BelongsTo

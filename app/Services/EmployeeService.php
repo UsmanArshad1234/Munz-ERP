@@ -82,6 +82,41 @@ class EmployeeService
         return $employee->fresh();
     }
 
+    private function formatDocuments(Employee $employee): array
+    {
+        return ($employee->relationLoaded('documents') ? $employee->documents : collect())
+            ->map(fn($d) => [
+                'id'            => $d->id,
+                'document_type' => $d->document_type,
+                'original_name' => $d->original_name,
+                'file_url'      => asset('storage/' . $d->file_path),
+                'file_size'     => $d->file_size_human,
+                'expiry_date'   => $d->expiry_date?->toDateString(),
+                'uploaded_at'   => $d->created_at,
+            ])->values()->toArray();
+    }
+
+    private function formatDocumentsByType(Employee $employee): array
+    {
+        $docs = ($employee->relationLoaded('documents') ? $employee->documents : collect())
+            ->keyBy('document_type');
+
+        $result = [];
+        foreach (\App\Models\EmployeeDocument::TYPES as $type) {
+            $doc = $docs->get($type);
+            $result[$type] = $doc ? [
+                'id'            => $doc->id,
+                'original_name' => $doc->original_name,
+                'file_url'      => asset('storage/' . $doc->file_path),
+                'file_size'     => $doc->file_size_human,
+                'expiry_date'   => $doc->expiry_date?->toDateString(),
+                'uploaded_at'   => $doc->created_at,
+            ] : null;
+        }
+
+        return $result;
+    }
+
     private function extractDocumentFiles(array &$data): array
     {
         $files = [];
@@ -133,6 +168,18 @@ class EmployeeService
     }
 
     // ── Documents ─────────────────────────────────────────────────────────────
+
+    public function uploadOrReplaceDocument(Employee $employee, UploadedFile $file, string $documentType, ?string $expiryDate, int $uploadedBy): EmployeeDocument
+    {
+        // Delete existing document of this type if present
+        $existing = $employee->documents()->where('document_type', $documentType)->first();
+        if ($existing) {
+            Storage::disk('public')->delete($existing->file_path);
+            $existing->delete();
+        }
+
+        return $this->uploadDocument($employee, $file, $documentType, $expiryDate, $uploadedBy);
+    }
 
     public function uploadDocument(Employee $employee, UploadedFile $file, string $documentType, ?string $expiryDate, int $uploadedBy): EmployeeDocument
     {
@@ -268,7 +315,8 @@ class EmployeeService
             'assigned_bike_id'        => $employee->assigned_bike_id,
             'notes'                   => $employee->notes,
             'expiry_status'           => $employee->getExpiryStatus(),
-            'documents'               => $employee->documents ?? [],
+            'documents'               => $this->formatDocuments($employee),
+            'documents_by_type'       => $this->formatDocumentsByType($employee),
             'created_at'              => $employee->created_at,
             'updated_at'              => $employee->updated_at,
         ];

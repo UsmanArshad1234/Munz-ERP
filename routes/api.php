@@ -82,6 +82,8 @@ Route::middleware('auth:sanctum')->group(function () {
              ->middleware('permission:documents.view');
         Route::post('{employee}/documents',                       [EmployeeController::class, 'uploadDocument'])
              ->middleware('permission:documents.upload');
+        Route::post('{employee}/documents/{type}/upload',         [EmployeeController::class, 'uploadByType'])
+             ->middleware('permission:documents.upload');
         Route::delete('{employee}/documents/{document}',          [EmployeeController::class, 'deleteDocument'])
              ->middleware('permission:documents.delete');
     });
