@@ -74,6 +74,8 @@ Route::middleware('auth:sanctum')->group(function () {
              ->middleware('permission:employees.update');
         Route::delete('{employee}',    [EmployeeController::class, 'destroy'])
              ->middleware('permission:employees.delete');
+        Route::post('{employee}/update-documents', [EmployeeController::class, 'updateProfileDocuments'])
+             ->middleware('permission:employees.update');
 
         // Documents
         Route::get('{employee}/documents',                        [EmployeeController::class, 'documents'])

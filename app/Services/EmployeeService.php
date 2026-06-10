@@ -99,6 +99,39 @@ class EmployeeService
         $employee->delete(); // soft delete
     }
 
+    public function updateProfileDocuments(Employee $employee, ?UploadedFile $passport, ?UploadedFile $visa): array
+    {
+        $updates = [];
+
+        if ($passport) {
+            if ($employee->passport_document) {
+                Storage::disk('public')->delete($employee->passport_document);
+            }
+            $updates['passport_document'] = $passport->store("employees/{$employee->id}/docs", 'public');
+        }
+
+        if ($visa) {
+            if ($employee->visa_document) {
+                Storage::disk('public')->delete($employee->visa_document);
+            }
+            $updates['visa_document'] = $visa->store("employees/{$employee->id}/docs", 'public');
+        }
+
+        if (!empty($updates)) {
+            $employee->update($updates);
+            $employee->refresh();
+        }
+
+        return [
+            'passport_document_url' => $employee->passport_document
+                                        ? asset('storage/' . $employee->passport_document)
+                                        : null,
+            'visa_document_url'     => $employee->visa_document
+                                        ? asset('storage/' . $employee->visa_document)
+                                        : null,
+        ];
+    }
+
     // ── Documents ─────────────────────────────────────────────────────────────
 
     public function uploadDocument(Employee $employee, UploadedFile $file, string $documentType, ?string $expiryDate, int $uploadedBy): EmployeeDocument

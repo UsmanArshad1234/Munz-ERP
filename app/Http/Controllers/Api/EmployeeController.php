@@ -81,6 +81,27 @@ class EmployeeController extends Controller
         return $this->success(null, 'Employee deleted successfully');
     }
 
+    // POST /api/employees/{employee}/update-documents
+    public function updateProfileDocuments(Request $request, Employee $employee): JsonResponse
+    {
+        $request->validate([
+            'passport_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'visa_document'     => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+        ]);
+
+        if (!$request->hasFile('passport_document') && !$request->hasFile('visa_document')) {
+            return $this->error('At least one document file is required', 422);
+        }
+
+        $updated = $this->employeeService->updateProfileDocuments(
+            $employee,
+            $request->file('passport_document'),
+            $request->file('visa_document')
+        );
+
+        return $this->success($updated, 'Documents updated successfully');
+    }
+
     // POST /api/employees/{employee}/documents
     public function uploadDocument(Request $request, Employee $employee): JsonResponse
     {
