@@ -95,7 +95,7 @@ class DashboardService
     {
         if ($v = $filters['emirate']     ?? null) $query->where('emirate',           $v);
         if ($v = $filters['zone']        ?? null) $query->where('zone',              $v);
-        if ($v = $filters['bike_status'] ?? null) $query->where('status',            $v);
+        if ($v = $filters['bike_status'] ?? null) $query->where('status',            strtolower(str_replace(' ', '_', $v)));
         if ($v = $filters['employee_id'] ?? null) $query->where('current_rider_id',  $v);
         return $query;
     }
@@ -164,13 +164,16 @@ class DashboardService
     {
         $base = fn() => $this->applyBikeFilters(Motorbike::query(), $filters);
 
+        $offRoadStatuses = ['inactive', 'sold', 'cancelled', 'damaged'];
+
         return [
             'total_bikes'          => $base()->count(),
             'assigned_bikes'       => $base()->where('status', 'assigned')->count(),
             'available_bikes'      => $base()->where('status', 'available')->count(),
-            'inactive_bikes'       => $base()->where('status', 'inactive')->count(),
+            'maintenance_bikes'    => $base()->where('status', 'under_maintenance')->count(),
+            'inactive_bikes'       => $base()->whereIn('status', $offRoadStatuses)->count(),
             'bikes_without_worker' => $base()->whereNull('current_rider_id')
-                                             ->where('status', '!=', 'inactive')->count(),
+                                             ->whereNotIn('status', $offRoadStatuses)->count(),
         ];
     }
 
