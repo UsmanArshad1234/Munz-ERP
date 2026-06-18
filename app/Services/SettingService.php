@@ -67,6 +67,8 @@ class SettingService
 
     public function getTypes(): array
     {
-        return Setting::TYPES;
+        // Include dashboard-facing aliases so the frontend's useSettingsOptions()
+        // can resolve 'emirate' and 'platform' via GET /settings/types.
+        return array_merge(Setting::TYPES, array_keys(Setting::TYPE_ALIASES));
     }
 }

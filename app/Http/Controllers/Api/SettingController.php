@@ -29,14 +29,16 @@ class SettingController extends Controller
         return $this->success($this->settingService->getTypes());
     }
 
-    // GET /api/settings/{type} — values for one type
+    // GET /api/settings/{type} — values for one type (supports dashboard aliases)
     public function byType(string $type): JsonResponse
     {
-        if (!in_array($type, Setting::TYPES)) {
+        $resolved = Setting::TYPE_ALIASES[$type] ?? $type;
+
+        if (!in_array($resolved, Setting::TYPES)) {
             return $this->error("Invalid setting type: {$type}", 422);
         }
 
-        return $this->success($this->settingService->getByType($type));
+        return $this->success($this->settingService->getByType($resolved));
     }
 
     // POST /api/settings

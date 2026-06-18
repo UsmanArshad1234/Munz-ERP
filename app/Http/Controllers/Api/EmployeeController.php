@@ -7,16 +7,21 @@ use App\Http\Requests\Employee\CreateEmployeeRequest;
 use App\Http\Requests\Employee\UpdateEmployeeRequest;
 use App\Models\Employee;
 use App\Models\EmployeeDocument;
+use App\Services\EmployeeBulkImportService;
 use App\Services\EmployeeService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class EmployeeController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(private readonly EmployeeService $employeeService) {}
+    public function __construct(
+        private readonly EmployeeService $employeeService,
+        private readonly EmployeeBulkImportService $bulkImportService,
+    ) {}
 
     // GET /api/employees
     public function index(Request $request): JsonResponse
@@ -187,5 +192,42 @@ class EmployeeController extends Controller
 
         $this->employeeService->deleteDocument($document);
         return $this->success(null, 'Document deleted');
+    }
+
+    // POST /api/employees/bulk-import
+    public function bulkImport(Request $request): JsonResponse
+    {
+        $request->validate([
+            'file' => ['required', 'file', 'mimes:xlsx,xls,csv', 'max:5120'],
+        ]);
+
+        $result = $this->bulkImportService->import(
+            $request->file('file'),
+            $request->user()->id
+        );
+
+        $message = "Import complete: {$result['valid_rows']} imported, {$result['error_rows']} failed.";
+
+        return $this->success($result, $message, $result['error_rows'] > 0 ? 207 : 200);
+    }
+
+    // POST /api/employees/bulk-update
+    public function bulkUpdate(Request $request): JsonResponse
+    {
+        $request->validate([
+            'file' => ['required', 'file', 'mimes:xlsx,xls,csv', 'max:5120'],
+        ]);
+
+        $result = $this->bulkImportService->update($request->file('file'));
+
+        $message = "Update complete: {$result['updated_rows']} updated, {$result['error_rows']} failed.";
+
+        return $this->success($result, $message, $result['error_rows'] > 0 ? 207 : 200);
+    }
+
+    // GET /api/employees/bulk-import/error-report/{token}
+    public function downloadErrorReport(string $token): StreamedResponse
+    {
+        return $this->bulkImportService->downloadErrorReport($token);
     }
 }

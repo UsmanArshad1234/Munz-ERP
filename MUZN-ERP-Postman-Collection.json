@@ -1,0 +1,3098 @@
+{
+  "info": {
+    "name": "MUZN ERP API",
+    "_postman_id": "muzn-erp-api-collection",
+    "description": "MUZN Delivery Operations ERP — Complete API Collection\n\n**Base URL:** https://api.muzndelivery.com/api\n\n**Setup:**\n1. Login request chalao\n2. Response se `token` copy karo\n3. Collection Variables mein `token` set karo\n\n**Default Credentials:**\n- owner@muzn.com / password\n- superadmin@muzn.com / password\n- admin@muzn.com / password\n\n**Roles:** owner | superadmin | admin",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://api.muzndelivery.com/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "🔐 Auth",
+      "description": "Authentication — Login, Logout, Profile",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"owner@muzn.com\",\n  \"password\": \"password\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Login — returns Bearer token. Token ko copy karke Collection Variable `token` mein set karo."
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/logout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Logout All Devices",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/logout-all",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "logout-all"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get My Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Owner Name\",\n  \"email\": \"owner@muzn.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "profile"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"current_password\": \"password\",\n  \"password\": \"NewPass@123\",\n  \"password_confirmation\": \"NewPass@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/change-password",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "change-password"
+              ]
+            }
+          }
+        },
+        {
+          "name": "My Permissions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/my-permissions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "my-permissions"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "⚙️ Settings",
+      "description": "App Settings — Zones, Departments, Platforms etc.",
+      "item": [
+        {
+          "name": "Get All Settings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/settings",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "settings"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Setting Types",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/settings/types",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "settings",
+                "types"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Settings by Type",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/settings/emirate",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "settings",
+                "emirate"
+              ]
+            },
+            "description": "Type examples: zone, work_emirate, platform_name, job_title, department, fine_type\n\nDashboard aliases (also accepted):\n  emirate  → same rows as work_emirate\n  platform → same rows as platform_name\n\nUse GET /settings/types to see all valid types."
+          }
+        },
+        {
+          "name": "Create Setting",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"zone\",\n  \"value\": \"Jumeirah\",\n  \"label\": \"Jumeirah\",\n  \"sort_order\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/settings",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "settings"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Setting",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"label\": \"Jumeirah Updated\",\n  \"sort_order\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/settings/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "settings",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Setting",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/settings/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "settings",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Reorder Settings",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"order\": [3, 1, 4, 2]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/settings/zone/reorder",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "settings",
+                "zone",
+                "reorder"
+              ]
+            },
+            "description": "Setting IDs ki nayi order array bhejo. Type examples: zone, department, platform"
+          }
+        }
+      ]
+    },
+    {
+      "name": "👥 Employees",
+      "description": "Employee Management — CRUD, Documents, Expiry Alerts",
+      "item": [
+        {
+          "name": "List Employees",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/employees?page=1&per_page=15&status=active&search=",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "employees"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "15"
+                },
+                {
+                  "key": "status",
+                  "value": "active"
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Employee Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/employees/stats",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "employees",
+                "stats"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Expiry Alerts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/employees/expiry-alerts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "employees",
+                "expiry-alerts"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Employee",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ahmed Ali\",\n  \"mobile\": \"+971501234567\",\n  \"email\": \"ahmed@muzn.com\",\n  \"nationality\": \"Pakistani\",\n  \"job_title\": \"Delivery Rider\",\n  \"department\": \"Operations\",\n  \"status\": \"active\",\n  \"work_emirate\": \"Dubai\",\n  \"zone\": \"Downtown\",\n  \"platform_name\": \"Talabat\",\n  \"platform_id\": \"TAL-001\",\n  \"salary_amount\": 2500.00,\n  \"salary_type\": \"monthly\",\n  \"wps_status\": \"enrolled\",\n  \"passport_number\": \"AB1234567\",\n  \"passport_expiry\": \"2027-12-31\",\n  \"emirates_id\": \"784-1990-1234567-1\",\n  \"emirates_id_expiry\": \"2026-06-30\",\n  \"visa_expiry\": \"2026-08-15\",\n  \"labour_card_expiry\": \"2026-08-15\",\n  \"driving_license\": \"DL-12345\",\n  \"driving_license_expiry\": \"2027-03-20\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/employees",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "employees"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Employee",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/employees/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "employees",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Employee",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ahmed Ali Updated\",\n  \"mobile\": \"+971501234567\",\n  \"status\": \"active\",\n  \"salary_amount\": 2800.00\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/employees/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "employees",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Employee",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/employees/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "employees",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Employee Documents",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/employees/1/documents",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "employees",
+                "1",
+                "documents"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Upload Employee Document",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "document_type",
+                  "value": "passport",
+                  "type": "text"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": ""
+                },
+                {
+                  "key": "notes",
+                  "value": "Passport copy",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/employees/1/documents",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "employees",
+                "1",
+                "documents"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Employee Document",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/employees/1/documents/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "employees",
+                "1",
+                "documents",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "--- Bulk Operations ---",
+          "item": [
+            {
+              "name": "Bulk Import Employees",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "file",
+                      "type": "file",
+                      "src": "",
+                      "description": "xlsx, xls, or csv file"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{base_url}}/employees/bulk-import",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "employees",
+                    "bulk-import"
+                  ]
+                },
+                "description": "Upload Excel (.xlsx/.xls) or CSV to create employees in bulk.\n\nRequired columns: name, mobile\nOptional: email, nationality, work_emirate, zone, platform_name, salary_amount, salary_type, emirates_id, passport_number, passport_expiry, emirates_id_expiry, visa_expiry, labour_card_expiry, driving_license_expiry\n\nDate format: YYYY-MM-DD\n\nRow errors:\n- 'Missing name'\n- 'Missing mobile number'\n- 'Wrong date format in {field} (use YYYY-MM-DD)'\n- 'Duplicate Emirates ID {eid} in file'\n- 'Emirates ID {eid} already exists in system'\n\nResponse 200: all rows valid\nResponse 207: partial success — check error_report_token to download CSV of errors."
+              }
+            },
+            {
+              "name": "Bulk Update Employees",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "file",
+                      "type": "file",
+                      "src": "",
+                      "description": "xlsx, xls, or csv file"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{base_url}}/employees/bulk-update",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "employees",
+                    "bulk-update"
+                  ]
+                },
+                "description": "Upload Excel/CSV to update existing employees by employee_id.\n\nRequired column: employee_id (e.g. EMP-0001)\nUpdatable: mobile, email, work_emirate, zone, platform_name, salary_amount, status, passport_expiry, emirates_id_expiry, visa_expiry, labour_card_expiry, driving_license_expiry\n\nDate format: YYYY-MM-DD\nOnly provided columns are updated (empty cells are skipped)."
+              }
+            },
+            {
+              "name": "Download Error Report",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/employees/bulk-import/error-report/{{error_token}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "employees",
+                    "bulk-import",
+                    "error-report",
+                    "{{error_token}}"
+                  ]
+                },
+                "description": "Download CSV error report from a previous bulk import or update.\nReplace {{error_token}} with the error_report_token from bulk import/update response."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "🏍️ Motorbikes",
+      "description": "Motorbike Management — CRUD, Documents, Expiry Alerts",
+      "item": [
+        {
+          "name": "List Motorbikes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/motorbikes?page=1&status=available",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "motorbikes"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "status",
+                  "value": "available"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Motorbike Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/motorbikes/stats",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "motorbikes",
+                "stats"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Expiry Alerts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/motorbikes/expiry-alerts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "motorbikes",
+                "expiry-alerts"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Motorbike",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"plate_number\": \"12345\",\n  \"plate_code\": \"A\",\n  \"emirate\": \"Dubai\",\n  \"zone\": \"Downtown\",\n  \"bike_type\": \"delivery\",\n  \"brand\": \"Honda\",\n  \"model\": \"CB150\",\n  \"year\": 2023,\n  \"color\": \"Red\",\n  \"chassis_number\": \"CH123456789\",\n  \"engine_number\": \"EN123456789\",\n  \"insurance_company\": \"AXA Insurance\",\n  \"insurance_expiry\": \"2026-12-31\",\n  \"mulkiya_expiry\": \"2026-12-31\",\n  \"status\": \"available\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/motorbikes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "motorbikes"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Motorbike",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/motorbikes/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "motorbikes",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Motorbike",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"insurance_expiry\": \"2027-12-31\",\n  \"mulkiya_expiry\": \"2027-12-31\",\n  \"status\": \"available\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/motorbikes/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "motorbikes",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Motorbike",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/motorbikes/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "motorbikes",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Bike Documents",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/motorbikes/1/documents",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "motorbikes",
+                "1",
+                "documents"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Upload Bike Document",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "document_type",
+                  "value": "mulkiya",
+                  "type": "text"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/motorbikes/1/documents",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "motorbikes",
+                "1",
+                "documents"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Bike Document",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/motorbikes/1/documents/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "motorbikes",
+                "1",
+                "documents",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔄 Assignments",
+      "description": "Bike Assignments — Assign, Return, History",
+      "item": [
+        {
+          "name": "List Assignments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/assignments?page=1&status=active",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "assignments"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "status",
+                  "value": "active"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Current Assignments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/assignments/current",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "assignments",
+                "current"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Assignment Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/assignments/stats",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "assignments",
+                "stats"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Assign Bike to Employee",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"employee_id\": 1,\n  \"motorbike_id\": 1,\n  \"start_date\": \"2026-06-09\",\n  \"handover_condition\": \"Good condition, no damage\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/assignments/assign",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "assignments",
+                "assign"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Assignment",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/assignments/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "assignments",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Return Bike",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"return_date\": \"2026-06-09\",\n  \"return_condition\": \"Good condition\",\n  \"remarks\": \"Returned on time\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/assignments/1/return",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "assignments",
+                "1",
+                "return"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Mark Pending Return",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/assignments/1/pending-return",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "assignments",
+                "1",
+                "pending-return"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cancel Assignment",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/assignments/1/cancel",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "assignments",
+                "1",
+                "cancel"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Employee Assignment History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/assignments/employee/1/history",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "assignments",
+                "employee",
+                "1",
+                "history"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Bike Assignment History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/assignments/bike/1/history",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "assignments",
+                "bike",
+                "1",
+                "history"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "💰 Loans",
+      "description": "Employee Loans — Create, Payments, Track Balance",
+      "item": [
+        {
+          "name": "Loan Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/loans/stats",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "loans",
+                "stats"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Loans",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/loans?page=1&status=active&employee_id=",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "loans"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "status",
+                  "value": "active"
+                },
+                {
+                  "key": "employee_id",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Loan",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"employee_id\": 1,\n  \"loan_date\": \"2026-06-09\",\n  \"loan_amount\": 3000.00,\n  \"monthly_deduction\": 500.00,\n  \"number_of_installments\": 6,\n  \"notes\": \"Personal emergency loan\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/loans",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "loans"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Loan",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/loans/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "loans",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Loan",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"monthly_deduction\": 600.00,\n  \"status\": \"on_hold\",\n  \"notes\": \"On hold for this month\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/loans/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "loans",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Record Manual Payment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"payment_date\": \"2026-06-09\",\n  \"payment_amount\": 500.00,\n  \"payment_method\": \"cash\",\n  \"notes\": \"Cash payment received\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/loans/1/payments",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "loans",
+                "1",
+                "payments"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Loan Payments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/loans/1/payments",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "loans",
+                "1",
+                "payments"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Upload Loan Attachment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "attachment",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/loans/1/attachment",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "loans",
+                "1",
+                "attachment"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "💵 Payroll",
+      "description": "Payroll — Create, Approve, Salary Slip PDF",
+      "item": [
+        {
+          "name": "Payroll Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/payroll/stats?month=6&year=2026",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "payroll",
+                "stats"
+              ],
+              "query": [
+                {
+                  "key": "month",
+                  "value": "6"
+                },
+                {
+                  "key": "year",
+                  "value": "2026"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Payrolls",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/payroll?month=6&year=2026&payroll_status=draft",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "payroll"
+              ],
+              "query": [
+                {
+                  "key": "month",
+                  "value": "6"
+                },
+                {
+                  "key": "year",
+                  "value": "2026"
+                },
+                {
+                  "key": "payroll_status",
+                  "value": "draft"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Payroll",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"employee_id\": 1,\n  \"month\": 6,\n  \"year\": 2026,\n  \"attendance_days\": 26,\n  \"hours_compliance\": true,\n  \"salik_deduction\": 150.00,\n  \"penalty_deduction\": 0,\n  \"other_deduction\": 0,\n  \"notes\": \"June 2026 payroll\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/payroll",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "payroll"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Payroll",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/payroll/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "payroll",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Payroll",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"salik_deduction\": 200.00,\n  \"other_deduction\": 50.00,\n  \"notes\": \"Updated deductions\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/payroll/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "payroll",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Approve Payroll",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notes\": \"Approved for June 2026\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/payroll/1/approve",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "payroll",
+                "1",
+                "approve"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Reject Payroll",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notes\": \"Needs correction on deductions\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/payroll/1/reject",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "payroll",
+                "1",
+                "reject"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Mark Payroll Paid",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/payroll/1/mark-paid",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "payroll",
+                "1",
+                "mark-paid"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Download Salary Slip (PDF)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/payroll/1/slip",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "payroll",
+                "1",
+                "slip"
+              ]
+            },
+            "description": "Returns PDF file — Postman mein Send karke 'Save Response' se download karo"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🚨 Fines",
+      "description": "Fines & Penalties — Salik, Traffic, Company Penalties",
+      "item": [
+        {
+          "name": "Fine Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fines/stats",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fines",
+                "stats"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Fines",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fines?page=1&status=pending&fine_type=salik",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fines"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "status",
+                  "value": "pending"
+                },
+                {
+                  "key": "fine_type",
+                  "value": "salik",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Fine",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"employee_id\": 1,\n  \"fine_date\": \"2026-06-09\",\n  \"fine_type\": \"salik\",\n  \"amount\": 50.00,\n  \"description\": \"Salik charge - Al Maktoum Bridge\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/fines",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fines"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Pending Fines by Employee",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fines/employee/1/pending",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fines",
+                "employee",
+                "1",
+                "pending"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Fine",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fines/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fines",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Fine",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 75.00,\n  \"description\": \"Updated fine amount\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/fines/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fines",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Waive Fine",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notes\": \"Waived — management decision\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/fines/1/waive",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fines",
+                "1",
+                "waive"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Fine",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fines/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fines",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Upload Fine Receipt",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "receipt",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/fines/1/receipt",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fines",
+                "1",
+                "receipt"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "💸 Expenses",
+      "description": "Business Expenses — Fuel, Maintenance, Office, Salik",
+      "item": [
+        {
+          "name": "Expense Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/expenses/stats?month=6&year=2026",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "expenses",
+                "stats"
+              ],
+              "query": [
+                {
+                  "key": "month",
+                  "value": "6"
+                },
+                {
+                  "key": "year",
+                  "value": "2026"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Expense Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/expenses/categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "expenses",
+                "categories"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Expenses",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/expenses?page=1&category=fuel&status=pending",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "expenses"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "category",
+                  "value": "fuel",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "pending",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Expense",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"expense_date\": \"2026-06-09\",\n  \"category\": \"fuel\",\n  \"amount\": 200.00,\n  \"description\": \"Fuel refill for delivery bikes\",\n  \"vendor_name\": \"ADNOC Station\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/expenses",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "expenses"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Expense",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/expenses/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "expenses",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Expense",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 250.00,\n  \"description\": \"Updated fuel expense\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/expenses/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "expenses",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Approve Expense",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notes\": \"Approved by management\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/expenses/1/approve",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "expenses",
+                "1",
+                "approve"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Reject Expense",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notes\": \"Duplicate entry\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/expenses/1/reject",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "expenses",
+                "1",
+                "reject"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Expense",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/expenses/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "expenses",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Upload Expense Receipt",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "receipt",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/expenses/1/receipt",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "expenses",
+                "1",
+                "receipt"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📊 Dashboard",
+      "description": "Dashboard — Month filter + multi-filter support. Owner sees all sections, Admin sees operational only.",
+      "item": [
+        {
+          "name": "Dashboard Overview (Current Month)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/dashboard/overview",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dashboard",
+                "overview"
+              ]
+            },
+            "description": "Owner: full financial + operational.\nAdmin: operational only.\nNo filters = current month."
+          }
+        },
+        {
+          "name": "Dashboard Overview (Month + Filters)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/dashboard/overview",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dashboard",
+                "overview"
+              ],
+              "query": [
+                {
+                  "key": "month",
+                  "value": "2026-06",
+                  "description": "Format: YYYY-MM"
+                },
+                {
+                  "key": "emirate",
+                  "value": "",
+                  "description": "e.g. Dubai",
+                  "disabled": true
+                },
+                {
+                  "key": "zone",
+                  "value": "",
+                  "description": "e.g. Z1",
+                  "disabled": true
+                },
+                {
+                  "key": "platform",
+                  "value": "",
+                  "description": "e.g. Noon",
+                  "disabled": true
+                },
+                {
+                  "key": "employee_status",
+                  "value": "",
+                  "description": "active / inactive",
+                  "disabled": true
+                },
+                {
+                  "key": "bike_status",
+                  "value": "",
+                  "description": "available / assigned / maintenance",
+                  "disabled": true
+                },
+                {
+                  "key": "employee_id",
+                  "value": "",
+                  "description": "integer employee id — scope dashboard to a single rider",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "All filters optional. Combine: ?month=2026-04&emirate=dubai&platform=noon\n\n**employee_id** — scope the entire dashboard to a single rider/employee (their employee stats, their assigned bike, their payroll/fines).\n\nNote: emirate and platform values come from GET /settings/emirate and GET /settings/platform (slugified, e.g. 'dubai', 'noon')."
+          }
+        },
+        {
+          "name": "Dashboard Alerts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/dashboard/alerts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dashboard",
+                "alerts"
+              ],
+              "query": [
+                {
+                  "key": "month",
+                  "value": "2026-06",
+                  "description": "Format: YYYY-MM"
+                }
+              ]
+            },
+            "description": "Expiry alerts for employee documents + bike documents + financial alerts (owner only)."
+          }
+        },
+        {
+          "name": "Dashboard Status Checks",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/dashboard/status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dashboard",
+                "status"
+              ],
+              "query": [
+                {
+                  "key": "month",
+                  "value": "2026-06"
+                },
+                {
+                  "key": "emirate",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "platform",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "employee_id",
+                  "value": "",
+                  "description": "integer — scope to a single rider",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Row counts per module for selected month. Shows whether data exists.\nReturns: income_rows, expense_rows, payroll_rows, fine_rows, salik_rows."
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔧 Maintenance",
+      "description": "Motorbike Maintenance — Schedule, Track, History",
+      "item": [
+        {
+          "name": "Maintenance Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/maintenance/stats",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "maintenance",
+                "stats"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Upcoming Maintenance",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/maintenance/upcoming",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "maintenance",
+                "upcoming"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Maintenance",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/maintenance?page=1&status=completed",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "maintenance"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "status",
+                  "value": "completed",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Maintenance",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"motorbike_id\": 1,\n  \"maintenance_date\": \"2026-06-09\",\n  \"maintenance_type\": \"oil_change\",\n  \"cost\": 150.00,\n  \"description\": \"Regular oil change\",\n  \"vendor_name\": \"Al Futtaim Workshop\",\n  \"next_maintenance_date\": \"2026-09-09\",\n  \"status\": \"completed\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/maintenance",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "maintenance"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Maintenance",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/maintenance/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "maintenance",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Maintenance",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"completed\",\n  \"cost\": 175.00\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/maintenance/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "maintenance",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Maintenance",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/maintenance/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "maintenance",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Upload Maintenance Receipt",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "receipt",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/maintenance/1/receipt",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "maintenance",
+                "1",
+                "receipt"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "💹 Platform Income",
+      "description": "Income Tracking — Talabat, Careem, Noon, InDrive, Rider Cash",
+      "item": [
+        {
+          "name": "Platform List",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/platform-income/platforms",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "platform-income",
+                "platforms"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Income Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/platform-income/stats?month=6&year=2026",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "platform-income",
+                "stats"
+              ],
+              "query": [
+                {
+                  "key": "month",
+                  "value": "6"
+                },
+                {
+                  "key": "year",
+                  "value": "2026"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Platform Incomes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/platform-income?month=6&year=2026&source_type=platform",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "platform-income"
+              ],
+              "query": [
+                {
+                  "key": "month",
+                  "value": "6"
+                },
+                {
+                  "key": "year",
+                  "value": "2026"
+                },
+                {
+                  "key": "source_type",
+                  "value": "platform",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Income (Platform)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"income_date\": \"2026-06-09\",\n  \"source_type\": \"platform\",\n  \"platform_name\": \"Talabat\",\n  \"amount\": 15000.00,\n  \"description\": \"Talabat weekly payout\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/platform-income",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "platform-income"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Income (Rider Cash)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"income_date\": \"2026-06-09\",\n  \"source_type\": \"rider\",\n  \"employee_id\": 1,\n  \"amount\": 500.00,\n  \"description\": \"Cash collected from rider\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/platform-income",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "platform-income"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Income",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/platform-income/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "platform-income",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Income",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 16000.00,\n  \"description\": \"Updated payout amount\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/platform-income/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "platform-income",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Income",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/platform-income/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "platform-income",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Upload Income Receipt",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "receipt",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/platform-income/1/receipt",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "platform-income",
+                "1",
+                "receipt"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📉 Profit & Loss",
+      "description": "Financial Summary — Owner & Superadmin only",
+      "item": [
+        {
+          "name": "P&L Summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/profit-loss/summary?month=6&year=2026",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profit-loss",
+                "summary"
+              ],
+              "query": [
+                {
+                  "key": "month",
+                  "value": "6"
+                },
+                {
+                  "key": "year",
+                  "value": "2026"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Monthly Trend",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/profit-loss/monthly-trend?year=2026",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profit-loss",
+                "monthly-trend"
+              ],
+              "query": [
+                {
+                  "key": "year",
+                  "value": "2026"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📈 Reports",
+      "description": "Excel & PDF Reports — Export Data",
+      "item": [
+        {
+          "name": "Employees Excel Export",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reports/employees/excel?status=active",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reports",
+                "employees",
+                "excel"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "active",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Payroll Excel Export",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reports/payroll/excel?month=6&year=2026",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reports",
+                "payroll",
+                "excel"
+              ],
+              "query": [
+                {
+                  "key": "month",
+                  "value": "6"
+                },
+                {
+                  "key": "year",
+                  "value": "2026"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Expenses Excel Export",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reports/expenses/excel?month=6&year=2026",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reports",
+                "expenses",
+                "excel"
+              ],
+              "query": [
+                {
+                  "key": "month",
+                  "value": "6"
+                },
+                {
+                  "key": "year",
+                  "value": "2026"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Fines Excel Export",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reports/fines/excel?status=pending",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reports",
+                "fines",
+                "excel"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "pending",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Payroll PDF Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reports/payroll/pdf?month=6&year=2026",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reports",
+                "payroll",
+                "pdf"
+              ],
+              "query": [
+                {
+                  "key": "month",
+                  "value": "6"
+                },
+                {
+                  "key": "year",
+                  "value": "2026"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Profit & Loss PDF Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reports/profit-loss/pdf?month=6&year=2026",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reports",
+                "profit-loss",
+                "pdf"
+              ],
+              "query": [
+                {
+                  "key": "month",
+                  "value": "6"
+                },
+                {
+                  "key": "year",
+                  "value": "2026"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "👤 User Management",
+      "description": "Manage System Users — Owner & Superadmin only",
+      "item": [
+        {
+          "name": "List Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New Admin\",\n  \"email\": \"newadmin@muzn.com\",\n  \"password\": \"Admin@123\",\n  \"password_confirmation\": \"Admin@123\",\n  \"role\": \"admin\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Name\",\n  \"role\": \"admin\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/users/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Toggle User Status",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/1/toggle-status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "1",
+                "toggle-status"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔑 Permissions",
+      "description": "RBAC — Role & User Permission Management — Owner & Superadmin only",
+      "item": [
+        {
+          "name": "All Permissions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/permissions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "permissions"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Role Permissions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/permissions/role/admin",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "permissions",
+                "role",
+                "admin"
+              ]
+            },
+            "description": "Roles: owner | superadmin | admin"
+          }
+        },
+        {
+          "name": "Update Role Permissions",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"permissions\": [\n    \"employees.view\",\n    \"employees.create\",\n    \"motorbikes.view\",\n    \"assignments.view\",\n    \"assignments.create\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/permissions/role/admin",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "permissions",
+                "role",
+                "admin"
+              ]
+            }
+          }
+        },
+        {
+          "name": "User Permissions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/permissions/user/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "permissions",
+                "user",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update User Permissions (Override)",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"permissions\": [\n    \"payroll.view\",\n    \"payroll.create\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/permissions/user/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "permissions",
+                "user",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Reset User Permissions",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/permissions/user/1/reset",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "permissions",
+                "user",
+                "1",
+                "reset"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📋 Audit Logs",
+      "description": "System Audit Trail — Owner & Superadmin only",
+      "item": [
+        {
+          "name": "List Audit Logs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/audit-logs?page=1&model_type=Employee&action=created",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "audit-logs"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "model_type",
+                  "value": "Employee",
+                  "disabled": true
+                },
+                {
+                  "key": "action",
+                  "value": "created",
+                  "disabled": true
+                },
+                {
+                  "key": "user_id",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "date_from",
+                  "value": "2026-06-01",
+                  "disabled": true
+                },
+                {
+                  "key": "date_to",
+                  "value": "2026-06-30",
+                  "disabled": true
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Audit Model Types",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/audit-logs/model-types",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "audit-logs",
+                "model-types"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Model Audit Trail",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/audit-logs/Employee/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "audit-logs",
+                "Employee",
+                "1"
+              ]
+            },
+            "description": "Model types: Employee, Motorbike, Assignment, Loan, Payroll, Fine, Expense, PlatformIncome, Maintenance"
+          }
+        }
+      ]
+    }
+  ]
+}

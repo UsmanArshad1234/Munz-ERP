@@ -23,6 +23,13 @@ class Setting extends Model
         'fine_type', 'expense_category', 'income_type', 'payment_method',
     ];
 
+    // Dashboard-facing short names the frontend uses in GET /settings/{type}.
+    // Maps alias → real type stored in the database.
+    const TYPE_ALIASES = [
+        'emirate'  => 'work_emirate',
+        'platform' => 'platform_name',
+    ];
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);

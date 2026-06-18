@@ -68,6 +68,15 @@ Route::middleware('auth:sanctum')->group(function () {
              ->middleware('permission:employees.view');
         Route::post('/',               [EmployeeController::class, 'store'])
              ->middleware('permission:employees.create');
+
+        // Bulk operations — must be before {employee} wildcard
+        Route::post('bulk-import',     [EmployeeController::class, 'bulkImport'])
+             ->middleware('permission:employees.create');
+        Route::post('bulk-update',     [EmployeeController::class, 'bulkUpdate'])
+             ->middleware('permission:employees.update');
+        Route::get('bulk-import/error-report/{token}', [EmployeeController::class, 'downloadErrorReport'])
+             ->middleware('permission:employees.view');
+
         Route::get('{employee}',       [EmployeeController::class, 'show'])
              ->middleware('permission:employees.view');
         Route::put('{employee}',       [EmployeeController::class, 'update'])
@@ -230,6 +239,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('dashboard')->middleware('permission:dashboard.view')->group(function () {
         Route::get('overview', [DashboardController::class, 'overview']);
         Route::get('alerts',   [DashboardController::class, 'alerts']);
+        Route::get('status',   [DashboardController::class, 'status']);
     });
 
     // ── Maintenance ───────────────────────────────────────────────────────────
