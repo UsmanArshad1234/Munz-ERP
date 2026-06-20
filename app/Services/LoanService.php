@@ -120,6 +120,14 @@ class LoanService
         return $loan->payments()->with('creator:id,name')->orderBy('payment_date', 'desc')->get()->toArray();
     }
 
+    public function destroy(Loan $loan): void
+    {
+        if ($loan->attachment_path) {
+            Storage::disk('public')->delete($loan->attachment_path);
+        }
+        $loan->delete();
+    }
+
     public function uploadAttachment(Loan $loan, $file): string
     {
         if ($loan->attachment_path) {

@@ -96,6 +96,20 @@ class PayrollController extends Controller
         }
     }
 
+    public function destroy(Payroll $payroll, Request $request): JsonResponse
+    {
+        if (!$request->user()->isOwner()) {
+            return $this->error('Unauthorized. Only the owner can delete a payroll.', 403);
+        }
+
+        try {
+            $payroll->delete();
+            return $this->success(null, 'Payroll deleted successfully');
+        } catch (\Exception $e) {
+            return $this->error($e->getMessage(), 500);
+        }
+    }
+
     public function stats(Request $request): JsonResponse
     {
         $stats = $this->payrollService->getStats(

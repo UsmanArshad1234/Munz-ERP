@@ -165,6 +165,8 @@ Route::middleware('auth:sanctum')->group(function () {
              ->middleware('permission:loans.view');
         Route::post('{loan}/attachment',                 [LoanController::class, 'uploadAttachment'])
              ->middleware('permission:loans.update');
+        Route::delete('{loan}',                          [LoanController::class, 'destroy'])
+             ->middleware('permission:loans.delete');
     });
 
     // ── Payroll ───────────────────────────────────────────────────────────────
@@ -187,6 +189,8 @@ Route::middleware('auth:sanctum')->group(function () {
              ->middleware('permission:payroll.update');
         Route::get('{payroll}/slip',                     [PayrollController::class, 'downloadSlip'])
              ->middleware('permission:payroll.view');
+        Route::delete('{payroll}',                       [PayrollController::class, 'destroy'])
+             ->middleware('permission:payroll.delete');
     });
 
     // ── Fines ─────────────────────────────────────────────────────────────────

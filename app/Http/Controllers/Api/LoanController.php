@@ -83,6 +83,20 @@ class LoanController extends Controller
         }
     }
 
+    public function destroy(Loan $loan, Request $request): JsonResponse
+    {
+        if (!$request->user()->isOwner()) {
+            return $this->error('Unauthorized. Only the owner can delete a loan.', 403);
+        }
+
+        try {
+            $this->loanService->destroy($loan);
+            return $this->success(null, 'Loan deleted successfully');
+        } catch (\Exception $e) {
+            return $this->error($e->getMessage(), ($e->getCode() >= 400 && $e->getCode() < 600 ? (int)$e->getCode() : 500));
+        }
+    }
+
     public function stats(): JsonResponse
     {
         return $this->success($this->loanService->getStats(), 'Loan statistics retrieved');
