@@ -243,6 +243,16 @@ class AssignmentService
         ];
     }
 
+    public function destroy(Assignment $assignment): void
+    {
+        // If active assignment, free the bike and rider
+        if ($assignment->status === 'active') {
+            $assignment->motorbike?->update(['status' => 'available', 'current_rider_id' => null]);
+            $assignment->employee?->update(['assigned_bike_id' => null]);
+        }
+        $assignment->delete();
+    }
+
     // ── Helpers ───────────────────────────────────────────────────────────────
 
     private function generateAssignmentId(): string

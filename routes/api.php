@@ -145,6 +145,8 @@ Route::middleware('auth:sanctum')->group(function () {
              ->middleware('permission:assignments.view');
         Route::get('bike/{bikeId}/history',                    [AssignmentController::class, 'bikeHistory'])
              ->middleware('permission:assignments.view');
+        Route::delete('{assignment}',                          [AssignmentController::class, 'destroy'])
+             ->middleware('permission:assignments.delete');
     });
 
     // ── Loans ─────────────────────────────────────────────────────────────────

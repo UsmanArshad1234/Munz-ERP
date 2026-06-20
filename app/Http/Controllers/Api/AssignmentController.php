@@ -95,6 +95,21 @@ class AssignmentController extends Controller
         }
     }
 
+    // DELETE /api/assignments/{assignment}
+    public function destroy(Assignment $assignment, Request $request): JsonResponse
+    {
+        if (!$request->user()->isOwner()) {
+            return $this->error('Unauthorized. Only the owner can delete an assignment.', 403);
+        }
+
+        try {
+            $this->assignmentService->destroy($assignment);
+            return $this->success(null, 'Assignment deleted successfully');
+        } catch (\Exception $e) {
+            return $this->error($e->getMessage(), ($e->getCode() >= 400 && $e->getCode() < 600 ? (int)$e->getCode() : 500));
+        }
+    }
+
     // GET /api/assignments/employee/{employeeId}/history
     public function employeeHistory(int $employeeId): JsonResponse
     {
