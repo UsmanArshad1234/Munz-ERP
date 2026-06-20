@@ -58,18 +58,23 @@ class EmployeeBulkImportService
 
         $errors          = [];
         $validRows       = [];
+        $seenEmployeeIds = [];
         $seenEmiratesIds = [];
         $seenEmails      = [];
         $seenMobiles     = [];
 
         foreach ($rows as $index => $row) {
             $rowNum    = $index + 2; // +2 because row 1 = header
-            $rowErrors = $this->validateImportRow($row, $rowNum, $seenEmiratesIds, $seenEmails, $seenMobiles);
+            $rowErrors = $this->validateImportRow($row, $rowNum, $seenEmployeeIds, $seenEmiratesIds, $seenEmails, $seenMobiles);
 
             if (!empty($rowErrors)) {
                 $errors[] = ['row' => $rowNum, 'errors' => $rowErrors];
             } else {
                 $validRows[] = $row;
+                $empId = strtoupper(trim($row['employee_id'] ?? ''));
+                if ($empId) {
+                    $seenEmployeeIds[] = $empId;
+                }
                 if (!empty($row['emirates_id'])) {
                     $seenEmiratesIds[] = $row['emirates_id'];
                 }
@@ -180,13 +185,23 @@ class EmployeeBulkImportService
 
     // ── Validation ────────────────────────────────────────────────────────────
 
-    private function validateImportRow(array $row, int $rowNum, array $seenEmiratesIds, array $seenEmails, array $seenMobiles): array
+    private function validateImportRow(array $row, int $rowNum, array $seenEmployeeIds, array $seenEmiratesIds, array $seenEmails, array $seenMobiles): array
     {
         $errors = [];
 
         // Required fields
         if (empty(trim($row['name'] ?? ''))) {
             $errors[] = 'Missing name';
+        }
+
+        // Employee ID duplicate check (within file and DB)
+        $empId = strtoupper(trim($row['employee_id'] ?? ''));
+        if ($empId) {
+            if (in_array($empId, $seenEmployeeIds)) {
+                $errors[] = "Duplicate Employee ID {$empId} in file";
+            } elseif (Employee::where('employee_id', $empId)->exists()) {
+                $errors[] = "Employee ID {$empId} already exists in system";
+            }
         }
 
         // Mobile: required + duplicate check (within file and DB)
