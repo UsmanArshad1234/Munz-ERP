@@ -58,11 +58,12 @@ class EmployeeBulkImportService
 
         $errors          = [];
         $validRows       = [];
-        $seenEmiratesIds = []; // track duplicates within the file
+        $seenEmiratesIds = [];
+        $seenEmails      = [];
 
         foreach ($rows as $index => $row) {
             $rowNum    = $index + 2; // +2 because row 1 = header
-            $rowErrors = $this->validateImportRow($row, $rowNum, $seenEmiratesIds);
+            $rowErrors = $this->validateImportRow($row, $rowNum, $seenEmiratesIds, $seenEmails);
 
             if (!empty($rowErrors)) {
                 $errors[] = ['row' => $rowNum, 'errors' => $rowErrors];
@@ -70,6 +71,10 @@ class EmployeeBulkImportService
                 $validRows[] = $row;
                 if (!empty($row['emirates_id'])) {
                     $seenEmiratesIds[] = $row['emirates_id'];
+                }
+                $email = strtolower(trim($row['email'] ?? ''));
+                if ($email) {
+                    $seenEmails[] = $email;
                 }
             }
         }
@@ -170,7 +175,7 @@ class EmployeeBulkImportService
 
     // ── Validation ────────────────────────────────────────────────────────────
 
-    private function validateImportRow(array $row, int $rowNum, array $seenEmiratesIds): array
+    private function validateImportRow(array $row, int $rowNum, array $seenEmiratesIds, array $seenEmails): array
     {
         $errors = [];
 
@@ -182,7 +187,7 @@ class EmployeeBulkImportService
             $errors[] = 'Missing mobile number';
         }
 
-        // Emirates ID duplicate check (within file)
+        // Emirates ID duplicate check (within file and DB)
         $eid = trim($row['emirates_id'] ?? '');
         if ($eid) {
             if (in_array($eid, $seenEmiratesIds)) {
@@ -192,18 +197,24 @@ class EmployeeBulkImportService
             }
         }
 
+        // Email duplicate check (within file and DB)
+        $email = strtolower(trim($row['email'] ?? ''));
+        if ($email) {
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $errors[] = "Invalid email format";
+            } elseif (in_array($email, $seenEmails)) {
+                $errors[] = "Duplicate email {$email} in file";
+            } elseif (Employee::whereRaw('LOWER(email) = ?', [$email])->exists()) {
+                $errors[] = "Email {$email} already exists in system";
+            }
+        }
+
         // Date field format validation
         foreach (self::DATE_FIELDS as $field) {
             $val = trim($row[$field] ?? '');
             if ($val !== '' && $this->parseDate($val) === false) {
                 $errors[] = "Wrong date format in {$field} (use YYYY-MM-DD)";
             }
-        }
-
-        // Email format (optional)
-        $email = trim($row['email'] ?? '');
-        if ($email && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errors[] = "Invalid email format";
         }
 
         return $errors;
@@ -265,6 +276,12 @@ class EmployeeBulkImportService
 
     // ── Helpers ───────────────────────────────────────────────────────────────
 
+    // Map Excel column names (after WithHeadingRow snake_case conversion) to DB field names
+    const COLUMN_MAP = [
+        'platform'    => 'platform_name',
+        'gross_salary' => 'salary_amount',
+    ];
+
     private function parseFile(UploadedFile $file): array
     {
         $import = new EmployeeBulkImport();
@@ -274,9 +291,21 @@ class EmployeeBulkImportService
             ->map(fn($row) => $row instanceof \Illuminate\Support\Collection
                 ? $row->toArray()
                 : (array) $row)
+            ->map(fn($row) => $this->normalizeColumns($row))
             ->filter(fn($row) => !empty(array_filter($row, fn($v) => !is_null($v) && $v !== '')))
             ->values()
             ->toArray();
+    }
+
+    private function normalizeColumns(array $row): array
+    {
+        foreach (self::COLUMN_MAP as $from => $to) {
+            if (array_key_exists($from, $row) && !array_key_exists($to, $row)) {
+                $row[$to] = $row[$from];
+                unset($row[$from]);
+            }
+        }
+        return $row;
     }
 
     /**
