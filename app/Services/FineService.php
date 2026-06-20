@@ -84,9 +84,9 @@ class FineService
         return $fine->refresh();
     }
 
-    public function destroy(Fine $fine): void
+    public function destroy(Fine $fine, ?\App\Models\User $user = null): void
     {
-        if ($fine->status === Fine::STATUS_DEDUCTED) {
+        if ($fine->status === Fine::STATUS_DEDUCTED && !($user?->isOwnerOrSuperadmin())) {
             throw new \Exception('Cannot delete a fine that has been deducted from payroll.', 422);
         }
 

@@ -59,10 +59,10 @@ class FineController extends Controller
         }
     }
 
-    public function destroy(Fine $fine): JsonResponse
+    public function destroy(Fine $fine, Request $request): JsonResponse
     {
         try {
-            $this->fineService->destroy($fine);
+            $this->fineService->destroy($fine, $request->user());
             return $this->success(null, 'Fine deleted successfully');
         } catch (\Exception $e) {
             return $this->error($e->getMessage(), ($e->getCode() >= 400 && $e->getCode() < 600 ? (int)$e->getCode() : 500));

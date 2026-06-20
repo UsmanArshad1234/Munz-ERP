@@ -69,10 +69,10 @@ class ExpenseController extends Controller
         }
     }
 
-    public function destroy(Expense $expense): JsonResponse
+    public function destroy(Expense $expense, Request $request): JsonResponse
     {
         try {
-            $this->expenseService->destroy($expense);
+            $this->expenseService->destroy($expense, $request->user());
             return $this->success(null, 'Expense deleted successfully');
         } catch (\Exception $e) {
             return $this->error($e->getMessage(), ($e->getCode() >= 400 && $e->getCode() < 600 ? (int)$e->getCode() : 500));
