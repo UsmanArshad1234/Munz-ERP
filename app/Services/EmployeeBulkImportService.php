@@ -60,10 +60,11 @@ class EmployeeBulkImportService
         $validRows       = [];
         $seenEmiratesIds = [];
         $seenEmails      = [];
+        $seenMobiles     = [];
 
         foreach ($rows as $index => $row) {
             $rowNum    = $index + 2; // +2 because row 1 = header
-            $rowErrors = $this->validateImportRow($row, $rowNum, $seenEmiratesIds, $seenEmails);
+            $rowErrors = $this->validateImportRow($row, $rowNum, $seenEmiratesIds, $seenEmails, $seenMobiles);
 
             if (!empty($rowErrors)) {
                 $errors[] = ['row' => $rowNum, 'errors' => $rowErrors];
@@ -75,6 +76,10 @@ class EmployeeBulkImportService
                 $email = strtolower(trim($row['email'] ?? ''));
                 if ($email) {
                     $seenEmails[] = $email;
+                }
+                $mobile = preg_replace('/\D/', '', trim($row['mobile'] ?? ''));
+                if ($mobile) {
+                    $seenMobiles[] = $mobile;
                 }
             }
         }
@@ -175,7 +180,7 @@ class EmployeeBulkImportService
 
     // ── Validation ────────────────────────────────────────────────────────────
 
-    private function validateImportRow(array $row, int $rowNum, array $seenEmiratesIds, array $seenEmails): array
+    private function validateImportRow(array $row, int $rowNum, array $seenEmiratesIds, array $seenEmails, array $seenMobiles): array
     {
         $errors = [];
 
@@ -183,8 +188,17 @@ class EmployeeBulkImportService
         if (empty(trim($row['name'] ?? ''))) {
             $errors[] = 'Missing name';
         }
-        if (empty(trim($row['mobile'] ?? ''))) {
+
+        // Mobile: required + duplicate check (within file and DB)
+        $mobile = preg_replace('/\D/', '', trim($row['mobile'] ?? ''));
+        if (empty($mobile)) {
             $errors[] = 'Missing mobile number';
+        } else {
+            if (in_array($mobile, $seenMobiles)) {
+                $errors[] = "Duplicate mobile number in file";
+            } elseif (Employee::whereRaw("REGEXP_REPLACE(mobile, '[^0-9]', '') = ?", [$mobile])->exists()) {
+                $errors[] = "Mobile number already exists in system";
+            }
         }
 
         // Emirates ID duplicate check (within file and DB)
