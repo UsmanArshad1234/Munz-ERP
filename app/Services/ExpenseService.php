@@ -100,7 +100,7 @@ class ExpenseService
 
     public function destroy(Expense $expense, ?\App\Models\User $user = null): void
     {
-        if ($expense->isApproved() && !($user?->isOwnerOrSuperadmin())) {
+        if ($expense->isApproved() && !($user?->isOwner())) {
             throw new \Exception('Cannot delete an approved expense.', 422);
         }
 
