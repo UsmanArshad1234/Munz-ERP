@@ -278,9 +278,13 @@ class EmployeeBulkImportService
             $val = trim((string) ($row[$field] ?? ''));
             if ($val === '') continue;
 
-            $data[$field] = in_array($field, self::DATE_FIELDS)
-                ? $this->parseDate($val)
-                : $val;
+            if (in_array($field, self::DATE_FIELDS)) {
+                $data[$field] = $this->parseDate($val);
+            } elseif ($field === 'work_emirate') {
+                $data[$field] = $this->normalizeEmirate($val);
+            } else {
+                $data[$field] = $val;
+            }
         }
 
         return $data;
@@ -295,12 +299,48 @@ class EmployeeBulkImportService
             $val = trim((string) ($row[$field] ?? ''));
             if ($val === '') continue;
 
-            $data[$field] = in_array($field, self::DATE_FIELDS)
-                ? $this->parseDate($val)
-                : $val;
+            if (in_array($field, self::DATE_FIELDS)) {
+                $data[$field] = $this->parseDate($val);
+            } elseif ($field === 'work_emirate') {
+                $data[$field] = $this->normalizeEmirate($val);
+            } else {
+                $data[$field] = $val;
+            }
         }
 
         return $data;
+    }
+
+    // ── Emirate Normalization ─────────────────────────────────────────────────
+
+    const EMIRATE_MAP = [
+        'dubai'          => 'Dubai',
+        'abu dhabi'      => 'Abu Dhabi',
+        'abu_dhabi'      => 'Abu Dhabi',
+        'abudhabi'       => 'Abu Dhabi',
+        'sharjah'        => 'Sharjah',
+        'ajman'          => 'Ajman',
+        'fujairah'       => 'Fujairah',
+        'ras al khaimah' => 'Ras Al Khaimah',
+        'ras_al_khaimah' => 'Ras Al Khaimah',
+        'rasalkhaimah'   => 'Ras Al Khaimah',
+        'rak'            => 'Ras Al Khaimah',
+        'umm al quwain'  => 'Umm Al Quwain',
+        'umm_al_quwain'  => 'Umm Al Quwain',
+        'ummalquwain'    => 'Umm Al Quwain',
+        'uaq'            => 'Umm Al Quwain',
+        'al ain'         => 'Al Ain',
+        'al_ain'         => 'Al Ain',
+        'alain'          => 'Al Ain',
+        'khor fakkan'    => 'Khor Fakkan',
+        'khorfakkan'     => 'Khor Fakkan',
+        'khor_fakkan'    => 'Khor Fakkan',
+        'other'          => 'Other',
+    ];
+
+    private function normalizeEmirate(string $value): string
+    {
+        return self::EMIRATE_MAP[strtolower(trim($value))] ?? $value;
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
